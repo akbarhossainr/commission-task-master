@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+    php:
+        container_name: commission-task-master-php
+        build:
+            context: .
+            dockerfile: ./Dockerfile-fpm
+        volumes:
+            - .:/var/www/html
