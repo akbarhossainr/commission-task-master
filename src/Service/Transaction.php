@@ -1,0 +1,128 @@
+<?php
+
+namespace AkbarHossain\CommissionTask\Service;
+
+use AkbarHossain\CommissionTask\Service\CurrencyRate\CurrencyRate;
+
+class Transaction
+{
+    protected $config;
+    protected $transactionAt;
+    protected $userId;
+    protected $client;
+    protected $operationType;
+    protected $amount;
+    protected $currency;
+    protected $amountInBaseCurrency;
+
+    public function __construct(Config $config)
+    {
+        $this->config = $config;
+    }
+
+    private function getCurrencyRateService(): CurrencyRate
+    {
+        return $this->config->get('currency_rate');
+    }
+
+    public function getTransactionAt(): string
+    {
+        return $this->transactionAt;
+    }
+
+    public function setTransactionAt(string $date): self
+    {
+        $this->transactionAt = $date;
+
+        return $this;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $id): self
+    {
+        $this->userId = $id;
+
+        return $this;
+    }
+
+    public function getClient(): string
+    {
+        return $this->client;
+    }
+
+    public function setClient(string $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getOperationType(): string
+    {
+        return $this->operationType;
+    }
+
+    public function setOperationType(string $type): self
+    {
+        $this->operationType = $type;
+
+        return $this;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $value): self
+    {
+        $this->amount = $value;
+
+        return $this;
+    }
+
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $value): self
+    {
+        $this->currency = $value;
+
+        return $this;
+    }
+
+    public function getAmountInBaseCurrency(): float
+    {
+        /** @var CurrencyRate $currencyRate */
+        $currencyRate = $this->getCurrencyRateService();
+
+        return $this->getAmount() * $currencyRate->getRates()[$this->getCurrency()];
+    }
+
+    public function setAmountInBaseCurrency(float $value): self
+    {
+        $this->amountInBaseCurrency = $value;
+
+        return $this;
+    }
+
+    public function build(array $data): self
+    {
+        $obj = new self($this->config);
+
+        $obj->setTransactionAt($data['transaction_at'])
+            ->setUserId((int) $data['user_id'])
+            ->setClient($data['client'])
+            ->setOperationType($data['operation_type'])
+            ->setAmount((float) $data['amount'])
+            ->setCurrency($data['currency']);
+
+        return $obj;
+    }
+}
