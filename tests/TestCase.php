@@ -3,7 +3,7 @@
 namespace AkbarHossain\CommissionTask\Test;
 
 use AkbarHossain\CommissionTask\Service\Config;
-use AkbarHossain\CommissionTask\Service\Transaction;
+use AkbarHossain\CommissionTask\Entity\Transaction;
 use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
 class TestCase extends FrameworkTestCase

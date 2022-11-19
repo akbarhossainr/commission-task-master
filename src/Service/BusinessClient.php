@@ -2,6 +2,8 @@
 
 namespace AkbarHossain\CommissionTask\Service;
 
+use AkbarHossain\CommissionTask\Entity\Transaction;
+
 class BusinessClient extends Client
 {
     public function __construct(Config $config, Transaction $transaction)

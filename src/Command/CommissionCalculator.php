@@ -7,7 +7,7 @@ use AkbarHossain\CommissionTask\Service\Client;
 use AkbarHossain\CommissionTask\Service\ClientManager;
 use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Library\CsvFileReader;
-use AkbarHossain\CommissionTask\Service\Transaction;
+use AkbarHossain\CommissionTask\Entity\Transaction;
 
 class CommissionCalculator
 {

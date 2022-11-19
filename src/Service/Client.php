@@ -2,6 +2,8 @@
 
 namespace AkbarHossain\CommissionTask\Service;
 
+use AkbarHossain\CommissionTask\Entity\Transaction;
+
 abstract class Client
 {
     public const OPERATION_TYPE_WITHDRAW = 'withdraw';

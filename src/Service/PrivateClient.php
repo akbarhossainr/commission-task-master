@@ -2,6 +2,8 @@
 
 namespace AkbarHossain\CommissionTask\Service;
 
+use AkbarHossain\CommissionTask\Entity\Transaction;
+
 class PrivateClient extends Client
 {
     protected $freeWithdrawCountPerWeek;

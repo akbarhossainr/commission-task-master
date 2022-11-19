@@ -1,19 +1,20 @@
 <?php
 
-namespace AkbarHossain\CommissionTask\Service;
+namespace AkbarHossain\CommissionTask\Entity;
 
+use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Service\CurrencyRate\CurrencyRate;
 
-class Transaction
+final class Transaction
 {
-    protected $config;
-    protected $transactionAt;
-    protected $userId;
-    protected $client;
-    protected $operationType;
-    protected $amount;
-    protected $currency;
-    protected $amountInBaseCurrency;
+    private $config;
+    private $transactionAt;
+    private $userId;
+    private $client;
+    private $operationType;
+    private $amount;
+    private $currency;
+    private $amountInBaseCurrency;
 
     public function __construct(Config $config)
     {

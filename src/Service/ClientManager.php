@@ -2,6 +2,7 @@
 
 namespace AkbarHossain\CommissionTask\Service;
 
+use AkbarHossain\CommissionTask\Entity\Transaction;
 use Symfony\Component\Console\Exception\InvalidOptionException;
 
 class ClientManager
