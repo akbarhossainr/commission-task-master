@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkbarHossain\CommissionTask\Service\CurrencyRate;
+namespace AkbarHossain\CommissionTask\Library;
 
 class DefaultCurrencyRate implements CurrencyRate
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AkbarHossain\CommissionTask\Entity;
 
+use AkbarHossain\CommissionTask\Library\CurrencyRate;
 use AkbarHossain\CommissionTask\Service\Config;
-use AkbarHossain\CommissionTask\Service\CurrencyRate\CurrencyRate;
 
 final class Transaction
 {
