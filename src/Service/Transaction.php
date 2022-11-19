@@ -99,7 +99,7 @@ class Transaction
 
     public function getAmountInBaseCurrency(): float
     {
-        $rate = 1;
+        $rate = $this->config->get('base_currency.rate', 1);
 
         if ($this->getCurrency() !== $this->config->get('base_currency', 'EUR')) {
             /** @var CurrencyRate $currencyRate */
