@@ -22,7 +22,7 @@ class CommissionCalculator
     {
         $fileReader = new CsvFileReader($filePath);
 
-        foreach ($fileReader->readLines() as $key => $line) {
+        foreach ($fileReader->readLines() as $line) {
             $transaction = (new Transaction($this->config))->build([
                 'transaction_at' => $line[0],
                 'user_id' => $line[1],
