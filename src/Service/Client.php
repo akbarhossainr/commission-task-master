@@ -27,9 +27,9 @@ abstract class Client
 
     protected function feeRevertToTransactionCurrency(float $amount, string $currency): float
     {
-        $currencyRateService = $this->config->get('currency_rate');
+        if ($currency !== $this->config->get('base_currency', 'EUR')) {
+            $currencyRateService = $this->config->get('currency_rate');
 
-        if ($currencyRateService->getBaseCurrency() !== $currency) {
             return $amount / $currencyRateService->getRates()[$currency];
         }
 

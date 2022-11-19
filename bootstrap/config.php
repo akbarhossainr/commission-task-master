@@ -7,6 +7,7 @@ use AkbarHossain\CommissionTask\Service\WithdrawLedger;
 $config = new Config();
 
 $settings = [
+    'base_currency' => 'EUR',
     'commission_rate.business.deposit' => 0.03,
     'commission_rate.business.withdraw' => 0.5,
     'commission_rate.private.deposit' => 0.03,

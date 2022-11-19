@@ -92,17 +92,22 @@ class Transaction
 
     public function setCurrency(string $value): self
     {
-        $this->currency = $value;
+        $this->currency = strtoupper($value);
 
         return $this;
     }
 
     public function getAmountInBaseCurrency(): float
     {
-        /** @var CurrencyRate $currencyRate */
-        $currencyRate = $this->getCurrencyRateService();
+        $rate = 1;
 
-        return $this->getAmount() * $currencyRate->getRates()[$this->getCurrency()];
+        if ($this->getCurrency() !== $this->config->get('base_currency', 'EUR')) {
+            /** @var CurrencyRate $currencyRate */
+            $currencyRate = $this->getCurrencyRateService();
+            $rate = $currencyRate->getRates()[$this->getCurrency()];
+        }
+
+        return $this->getAmount() * $rate;
     }
 
     public function setAmountInBaseCurrency(float $value): self
