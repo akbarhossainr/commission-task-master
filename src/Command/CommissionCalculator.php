@@ -4,10 +4,10 @@ namespace AkbarHossain\CommissionTask\Command;
 
 use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
 use AkbarHossain\CommissionTask\Service\Client;
-use AkbarHossain\CommissionTask\Service\ClientManager;
 use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Library\CsvFileReader;
 use AkbarHossain\CommissionTask\Entity\Transaction;
+use AkbarHossain\CommissionTask\Factory\ClientFactory;
 
 class CommissionCalculator
 {
@@ -38,8 +38,8 @@ class CommissionCalculator
         }
     }
 
-    protected function getClient(Config $config, Transaction $transaction): Client
+    private function getClient(Config $config, Transaction $transaction): Client
     {
-        return (new ClientManager($config))->getClient($transaction);
+        return (new ClientFactory($config))->getClient($transaction);
     }
 }
