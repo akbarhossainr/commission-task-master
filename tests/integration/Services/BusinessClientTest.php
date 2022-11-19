@@ -34,7 +34,7 @@ class BusinessClientTest extends TestCase
                         ->setClient('business')
                         ->setOperationType('withdraw'),
                     'expected' => 7.5,
-                ]
+                ],
             ],
             'deposit commission fee' => [
                 [
@@ -42,8 +42,8 @@ class BusinessClientTest extends TestCase
                         ->setClient('business')
                         ->setOperationType('deposit'),
                     'expected' => 0.45,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

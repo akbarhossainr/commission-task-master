@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkbarHossain\CommissionTask\Formatter;
 
-use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Entity\Transaction;
+use AkbarHossain\CommissionTask\Service\Config;
 
 final class DecimalFormatter implements Formatter
 {
-    protected $config;
-    protected $transaction;
+    private $config;
+    private $transaction;
 
     public function __construct(Config $config, Transaction $transaction)
     {
@@ -18,7 +20,7 @@ final class DecimalFormatter implements Formatter
 
     public function format(float $number): string
     {
-        $currency = $this->transaction->getCurrency() == 'JPY'
+        $currency = $this->transaction->getCurrency() === 'JPY'
             ? $this->transaction->getCurrency()
             : 'default';
 

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkbarHossain\CommissionTask\Command;
 
-use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
-use AkbarHossain\CommissionTask\Service\Client;
-use AkbarHossain\CommissionTask\Service\Config;
-use AkbarHossain\CommissionTask\Library\CsvFileReader;
 use AkbarHossain\CommissionTask\Entity\Transaction;
 use AkbarHossain\CommissionTask\Factory\ClientFactory;
+use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
+use AkbarHossain\CommissionTask\Library\CsvFileReader;
+use AkbarHossain\CommissionTask\Service\Client;
+use AkbarHossain\CommissionTask\Service\Config;
 
 class CommissionCalculator
 {
@@ -26,7 +28,7 @@ class CommissionCalculator
             $transaction = (new Transaction($this->config))->build([
                 'transaction_at' => $line[0],
                 'user_id' => $line[1],
-                'client' =>  $line[2],
+                'client' => $line[2],
                 'operation_type' => $line[3],
                 'amount' => $line[4],
                 'currency' => $line[5],
@@ -34,7 +36,7 @@ class CommissionCalculator
 
             $commissionFee = $this->getClient($this->config, $transaction)->commission();
 
-            echo (new DecimalFormatter($this->config, $transaction))->format($commissionFee) . PHP_EOL;
+            echo (new DecimalFormatter($this->config, $transaction))->format($commissionFee).PHP_EOL;
         }
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkbarHossain\CommissionTask\Service;
 
 use Carbon\CarbonImmutable;
@@ -7,20 +9,19 @@ use Carbon\CarbonInterface;
 
 final class WithdrawLedger
 {
-    protected $config;
+    private $config;
     public array $withdrawals = [];
 
-    protected const USER_ID = 'user_id';
-    protected const TRANSACTION_AT = 'transaction_at';
-    protected const AMOUNT = 'amount';
-
+    private const USER_ID = 'user_id';
+    private const TRANSACTION_AT = 'transaction_at';
+    private const AMOUNT = 'amount';
 
     public function __construct(Config $config)
     {
         $this->config = $config;
     }
 
-    protected function getStartAndEndDayOfTheWeek(): array
+    private function getStartAndEndDayOfTheWeek(): array
     {
         $startDayOfWeek = $this->config->get('week.start_day', 'monday');
         $endDayOfWeek = $this->config->get('week.end_day', 'sunday');
@@ -31,7 +32,7 @@ final class WithdrawLedger
         ];
     }
 
-    protected function transactionsInAWeek(int $userId, string $date): array
+    private function transactionsInAWeek(int $userId, string $date): array
     {
         [$startDayOfWeek, $endDayOfWeek] = $this->getStartAndEndDayOfTheWeek();
 

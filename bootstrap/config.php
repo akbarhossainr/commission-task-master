@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Service\CurrencyRate\DefaultCurrencyRate;
 use AkbarHossain\CommissionTask\Service\WithdrawLedger;

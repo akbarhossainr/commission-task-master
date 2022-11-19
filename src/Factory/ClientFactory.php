@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkbarHossain\CommissionTask\Factory;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;

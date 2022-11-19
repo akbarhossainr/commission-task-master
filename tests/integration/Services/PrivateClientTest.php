@@ -31,14 +31,14 @@ class PrivateClientTest extends TestCase
                 [
                     'transaction' => $this->createTransactionObject()->setOperationType('withdraw'),
                     'expected' => 1.5,
-                ]
+                ],
             ],
             'deposit commission fee' => [
                 [
                     'transaction' => $this->createTransactionObject()->setOperationType('deposit'),
                     'expected' => 0.45,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

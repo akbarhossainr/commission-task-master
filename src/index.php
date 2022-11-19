@@ -6,7 +6,7 @@ require_once 'vendor/autoload.php';
 
 use AkbarHossain\CommissionTask\Command\CommissionCalculator;
 
-$config = require_once __DIR__ . '/../bootstrap/config.php';
+$config = require_once __DIR__.'/../bootstrap/config.php';
 
 $input = $argv[1] ?? '';
 
