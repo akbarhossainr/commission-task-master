@@ -62,8 +62,7 @@ class PrivateClient extends Client
         int $userId,
         string $transactionAt,
         WithdrawLedger $withdrawLedger
-    ): float
-    {
+    ): float {
         if ($this->isFreeOfChargeApplicable($userId, $transactionAt, $withdrawLedger)) {
             return floatval(0);
         }
