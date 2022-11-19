@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
 class TestCase extends FrameworkTestCase
 {
-    public function getActualConfig(): Config
+    public function getDefaultConfig(): Config
     {
         return require __DIR__ . '/../bootstrap/config.php';
     }
@@ -26,6 +26,6 @@ class TestCase extends FrameworkTestCase
             ]
             : $data;
 
-        return (new Transaction($this->getActualConfig()))->build($data);
+        return (new Transaction($this->getDefaultConfig()))->build($data);
     }
 }

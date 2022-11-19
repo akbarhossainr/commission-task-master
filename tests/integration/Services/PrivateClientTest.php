@@ -5,58 +5,53 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Test\Integration;
 
 use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
-use AkbarHossain\CommissionTask\Service\BusinessClient;
+use AkbarHossain\CommissionTask\Service\PrivateClient;
 use AkbarHossain\CommissionTask\Test\TestCase;
 
-class BusinessClientTest extends TestCase
+class PrivateClientTest extends TestCase
 {
     protected $config;
     protected $transaction;
 
     public function setUp(): void
     {
-        $this->config = $this->getActualConfig();
+        $this->config = $this->getDefaultConfig();
     }
 
-    public function dataProviderForBusinessClient()
+    public function dataProviderForPrivateClient()
     {
         return [
             'default' => [
                 [
-                    'transaction' => $this->createTransactionObject()
-                        ->setClient('business'),
-                    'expected' => 7.5,
+                    'transaction' => $this->createTransactionObject(),
+                    'expected' => 1.5,
                 ],
             ],
             'withdraw commission fee' => [
                 [
-                    'transaction' => $this->createTransactionObject()
-                        ->setClient('business')
-                        ->setOperationType('withdraw'),
-                    'expected' => 7.5,
+                    'transaction' => $this->createTransactionObject()->setOperationType('withdraw'),
+                    'expected' => 1.5,
                 ]
             ],
             'deposit commission fee' => [
                 [
-                    'transaction' => $this->createTransactionObject()
-                        ->setClient('business')
-                        ->setOperationType('deposit'),
+                    'transaction' => $this->createTransactionObject()->setOperationType('deposit'),
                     'expected' => 0.45,
                 ]
             ]
         ];
     }
 
-    /** @dataProvider dataProviderForBusinessClient */
+    /** @dataProvider dataProviderForPrivateClient */
     public function testCommissionMethodReturnCorrectResult(array $data)
     {
-        $businessClient = new BusinessClient(
+        $privateClient = new PrivateClient(
             $this->config,
             $data['transaction']
         );
 
         $actual = (new DecimalFormatter($this->config, $data['transaction']))
-            ->format($businessClient->commission());
+            ->format($privateClient->commission());
 
         $this->assertEquals($data['expected'], $actual);
     }
