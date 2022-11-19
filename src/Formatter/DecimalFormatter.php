@@ -5,7 +5,7 @@ namespace AkbarHossain\CommissionTask\Formatter;
 use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Entity\Transaction;
 
-class DecimalFormatter
+final class DecimalFormatter implements Formatter
 {
     protected $config;
     protected $transaction;

@@ -5,7 +5,7 @@ namespace AkbarHossain\CommissionTask\Service;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 
-class WithdrawLedger
+final class WithdrawLedger
 {
     protected $config;
     public array $withdrawals = [];
