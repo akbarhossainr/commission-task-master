@@ -31,7 +31,7 @@ class WithdrawLedger
         ];
     }
 
-    protected function transactionsInAWeek(int $uid, string $date): array
+    protected function transactionsInAWeek(int $userId, string $date): array
     {
         [$startDayOfWeek, $endDayOfWeek] = $this->getStartAndEndDayOfTheWeek();
 
@@ -40,7 +40,7 @@ class WithdrawLedger
         $end = $carbonDate->endOfWeek($endDayOfWeek);
 
         return array_filter(
-            $this->withdrawals[$uid] ?? [],
+            $this->withdrawals[$userId] ?? [],
             function ($withdrawal) use ($start, $end) {
                 $date = CarbonImmutable::parse($withdrawal[self::TRANSACTION_AT]);
 
@@ -49,29 +49,29 @@ class WithdrawLedger
         );
     }
 
-    public function addWithdrawal(int $uid, string $date, float $amount): void
+    public function addToWithdrawLedger(int $userId, string $date, float $amount): void
     {
-        if (empty($this->withdrawals[$uid])) {
-            $this->withdrawals[$uid] = [];
+        if (empty($this->withdrawals[$userId])) {
+            $this->withdrawals[$userId] = [];
         }
 
-        $this->withdrawals[$uid][] = [
-            self::USER_ID => $uid,
+        $this->withdrawals[$userId][] = [
+            self::USER_ID => $userId,
             self::TRANSACTION_AT => $date,
             self::AMOUNT => $amount,
         ];
     }
 
-    public function withdrawInAWeek(int $uid, string $date): int
+    public function withdrawInAWeek(int $userId, string $date): int
     {
-        return count($this->transactionsInAWeek($uid, $date));
+        return count($this->transactionsInAWeek($userId, $date));
     }
 
-    public function withdrawAmountInAWeek(int $uid, string $date): float
+    public function withdrawAmountInAWeek(int $userId, string $date): float
     {
         return array_sum(
             array_column(
-                $this->transactionsInAWeek($uid, $date),
+                $this->transactionsInAWeek($userId, $date),
                 self::AMOUNT
             )
         );

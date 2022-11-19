@@ -37,26 +37,19 @@ class PrivateClient extends Client
     {
         /** @var WithdrawLedger $withdrawLedger */
         $withdrawLedger = $this->config->get('withdaw_ledger');
-        /**
-         * @ToDo: calculate number of transaction
-         * and sum of transaction in a week by a user
-         */
-        $uid = $this->transaction->getUserId();
+
+        $userId = $this->transaction->getUserId();
         $transactionAt = $this->transaction->getTransactionAt();
-        $commissionableAmount = $amountInBaseCurrency = $this->transaction->getAmountInBaseCurrency();
+        $amountInBaseCurrency = $this->transaction->getAmountInBaseCurrency();
 
-        $withdrawLedger->addWithdrawal($uid, $transactionAt, $amountInBaseCurrency);
+        $withdrawLedger->addToWithdrawLedger($userId, $transactionAt, $amountInBaseCurrency);
 
-        if (
-            $withdrawLedger->withdrawInAWeek($uid, $transactionAt) <= $this->freeWithdrawCountPerWeek
-            && $withdrawLedger->withdrawAmountInAWeek($uid, $transactionAt) <= $this->freeWithdrawAmountPerWeek
-        ) {
-            $commissionableAmount = 0;
-        }
-
-        $commissionableAmount = $commissionableAmount > $this->freeWithdrawAmountPerWeek
-            ? $commissionableAmount - $this->freeWithdrawAmountPerWeek
-            : $commissionableAmount;
+        $commissionableAmount = $this->getCommissionableAmount(
+            $amountInBaseCurrency,
+            $userId,
+            $transactionAt,
+            $withdrawLedger
+        );
 
         return $this->calculateCommission(
             $commissionableAmount,
@@ -72,5 +65,30 @@ class PrivateClient extends Client
             $this->transaction->getClient(),
             $this->transaction->getOperationType()
         );
+    }
+
+    private function isFreeOfChargeApplicable(
+        int $userId,
+        string $transactionAt,
+        WithdrawLedger $withdrawLedger
+    ): bool {
+        return $withdrawLedger->withdrawInAWeek($userId, $transactionAt) <= $this->freeWithdrawCountPerWeek
+            && $withdrawLedger->withdrawAmountInAWeek($userId, $transactionAt) <= $this->freeWithdrawAmountPerWeek;
+    }
+
+    private function getCommissionableAmount(
+        float $amount,
+        int $userId,
+        string $transactionAt,
+        WithdrawLedger $withdrawLedger
+    ): float
+    {
+        if ($this->isFreeOfChargeApplicable($userId, $transactionAt, $withdrawLedger)) {
+            return floatval(0);
+        }
+
+        return $amount > $this->freeWithdrawAmountPerWeek
+            ? $amount - $this->freeWithdrawAmountPerWeek
+            : $amount;
     }
 }
