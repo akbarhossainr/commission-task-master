@@ -6,7 +6,7 @@ use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
 use AkbarHossain\CommissionTask\Service\Client;
 use AkbarHossain\CommissionTask\Service\ClientManager;
 use AkbarHossain\CommissionTask\Service\Config;
-use AkbarHossain\CommissionTask\Service\CsvFileReader;
+use AkbarHossain\CommissionTask\Library\CsvFileReader;
 use AkbarHossain\CommissionTask\Service\Transaction;
 
 class CommissionCalculator

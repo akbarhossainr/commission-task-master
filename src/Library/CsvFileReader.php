@@ -1,6 +1,6 @@
 <?php
 
-namespace AkbarHossain\CommissionTask\Service;
+namespace AkbarHossain\CommissionTask\Library;
 
 use Exception;
 
