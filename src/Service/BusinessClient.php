@@ -4,32 +4,12 @@ namespace AkbarHossain\CommissionTask\Service;
 
 class BusinessClient extends Client
 {
-    protected $config;
-    protected $transaction;
-
     public function __construct(Config $config, Transaction $transaction)
     {
-        parent::__construct($config);
-
-        $this->transaction = $transaction;
+        parent::__construct($config, $transaction);
     }
 
-    public function commission(): float
-    {
-        $fee = 0;
-
-        if ($this->transaction->getOperationType() == 'withdraw') {
-            $fee = $this->calculateWithdrawFee();
-        }
-
-        if ($this->transaction->getOperationType() == 'deposit') {
-            $fee = $this->calculateDepositFee();
-        }
-
-        return $this->feeRevertToTransactionCurrency($fee, $this->transaction->getCurrency());
-    }
-
-    protected function calculateWithdrawFee()
+    protected function calculateWithdrawFee(): float
     {
         return $this->calculateCommission(
             $this->transaction->getAmountInBaseCurrency(),
@@ -38,7 +18,7 @@ class BusinessClient extends Client
         );
     }
 
-    protected function calculateDepositFee()
+    protected function calculateDepositFee(): float
     {
         return $this->calculateCommission(
             $this->transaction->getAmountInBaseCurrency(),

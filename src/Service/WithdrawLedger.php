@@ -49,7 +49,7 @@ class WithdrawLedger
         );
     }
 
-    public function addToWithdrawLedger(int $userId, string $date, float $amount): void
+    public function addToLedger(int $userId, string $date, float $amount): void
     {
         if (empty($this->withdrawals[$userId])) {
             $this->withdrawals[$userId] = [];

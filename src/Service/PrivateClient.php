@@ -4,45 +4,26 @@ namespace AkbarHossain\CommissionTask\Service;
 
 class PrivateClient extends Client
 {
-    protected $config;
-    protected $transaction;
     protected $freeWithdrawCountPerWeek;
     protected $freeWithdrawAmountPerWeek;
 
     public function __construct(Config $config, Transaction $transaction)
     {
-        parent::__construct($config);
+        parent::__construct($config, $transaction);
 
-        $this->transaction = $transaction;
         $this->freeWithdrawCountPerWeek = $this->getFreeWithdrawCountPerWeek();
         $this->freeWithdrawAmountPerWeek = $this->getFreeWithdrawAmountPerWeek();
     }
 
-    public function commission(): float
+    protected function calculateWithdrawFee(): float
     {
-        $fee = 0;
-
-        if ($this->transaction->getOperationType() == 'withdraw') {
-            $fee = $this->calculateWithdrawFee();
-        }
-
-        if ($this->transaction->getOperationType() == 'deposit') {
-            $fee = $this->calculateDepositFee();
-        }
-
-        return $this->feeRevertToTransactionCurrency($fee, $this->transaction->getCurrency());
-    }
-
-    protected function calculateWithdrawFee()
-    {
-        /** @var WithdrawLedger $withdrawLedger */
-        $withdrawLedger = $this->config->get('withdaw_ledger');
-
         $userId = $this->transaction->getUserId();
         $transactionAt = $this->transaction->getTransactionAt();
         $amountInBaseCurrency = $this->transaction->getAmountInBaseCurrency();
 
-        $withdrawLedger->addToWithdrawLedger($userId, $transactionAt, $amountInBaseCurrency);
+        /** @var WithdrawLedger $withdrawLedger */
+        $withdrawLedger = $this->config->get('withdaw_ledger');
+        $withdrawLedger->addToLedger($userId, $transactionAt, $amountInBaseCurrency);
 
         $commissionableAmount = $this->getCommissionableAmount(
             $amountInBaseCurrency,
@@ -58,7 +39,7 @@ class PrivateClient extends Client
         );
     }
 
-    protected function calculateDepositFee()
+    protected function calculateDepositFee(): float
     {
         return $this->calculateCommission(
             $this->transaction->getAmountInBaseCurrency(),

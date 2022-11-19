@@ -4,14 +4,43 @@ namespace AkbarHossain\CommissionTask\Service;
 
 abstract class Client
 {
-    protected $config;
+    public const OPERATION_TYPE_WITHDRAW = 'withdraw';
+    public const OPERATION_TYPE_DEPOSIT = 'deposit';
 
-    public function __construct(Config $config)
+    protected $config;
+    protected $transaction;
+
+    public function __construct(Config $config, Transaction $transaction)
     {
         $this->config = $config;
+        $this->transaction = $transaction;
     }
 
-    abstract public function commission(): float;
+    public function commission(): float
+    {
+        switch ($this->transaction->getOperationType()) {
+            case self::OPERATION_TYPE_WITHDRAW:
+                $fee = $this->calculateWithdrawFee();
+                break;
+
+            case self::OPERATION_TYPE_DEPOSIT:
+                $fee = $this->calculateDepositFee();
+                break;
+
+            default:
+                $fee = floatval(0);
+                break;
+        }
+
+        return $this->revertToTransactionCurrency(
+            $fee,
+            $this->transaction->getCurrency()
+        );
+    }
+
+    abstract protected function calculateWithdrawFee(): float;
+
+    abstract protected function calculateDepositFee(): float;
 
     protected function getCommissionRate(string $type, string $client): float
     {
@@ -25,7 +54,7 @@ abstract class Client
         return $amount * ($rate / 100);
     }
 
-    protected function feeRevertToTransactionCurrency(float $amount, string $currency): float
+    protected function revertToTransactionCurrency(float $amount, string $currency): float
     {
         if ($currency !== $this->config->get('base_currency', 'EUR')) {
             $currencyRateService = $this->config->get('currency_rate');
