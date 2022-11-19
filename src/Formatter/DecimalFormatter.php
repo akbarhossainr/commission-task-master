@@ -16,7 +16,7 @@ class DecimalFormatter
         $this->transaction = $transaction;
     }
 
-    public function format(float $number): void
+    public function format(float $number): string
     {
         $currency = $this->transaction->getCurrency() == 'JPY'
             ? $this->transaction->getCurrency()
@@ -24,6 +24,6 @@ class DecimalFormatter
 
         $decimalPlace = $this->config->get(sprintf('decimal_place.%s', $currency));
 
-        echo number_format($number, $decimalPlace, '.', '') . PHP_EOL;
+        return number_format($number, $decimalPlace, '.', '');
     }
 }

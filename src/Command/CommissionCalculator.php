@@ -34,7 +34,7 @@ class CommissionCalculator
 
             $commissionFee = $this->getClient($this->config, $transaction)->commission();
 
-            (new DecimalFormatter($this->config, $transaction))->format($commissionFee);
+            echo (new DecimalFormatter($this->config, $transaction))->format($commissionFee) . PHP_EOL;
         }
     }
 
