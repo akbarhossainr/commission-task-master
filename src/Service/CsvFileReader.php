@@ -6,6 +6,8 @@ use Exception;
 
 class CsvFileReader
 {
+    public const EXTENSION = 'csv';
+
     protected $file;
 
     /**
@@ -16,6 +18,12 @@ class CsvFileReader
         try {
             if (!file_exists($path)) {
                 throw new Exception('The file could not be found.');
+            }
+
+            $extention = pathinfo($path, PATHINFO_EXTENSION);
+
+            if ($extention !== self::EXTENSION) {
+                throw new Exception(sprintf('Expecting file format is [%s]', self::EXTENSION));
             }
 
             $this->file = fopen($path, 'r');
@@ -37,6 +45,8 @@ class CsvFileReader
 
     public function __destruct()
     {
-        fclose($this->file);
+        if ($this->file) {
+            fclose($this->file);
+        }
     }
 }
