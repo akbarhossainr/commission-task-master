@@ -21,5 +21,5 @@ return [
     'free_withdraw.per_week' => 3,
     'week.end_day' => 'sunday',
     'week.start_day' => 'monday',
-    'withdaw_ledger' => create(WithdrawLedger::class),
+    'withdraw_ledger' => create(WithdrawLedger::class),
 ];

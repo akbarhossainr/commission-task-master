@@ -6,6 +6,7 @@ namespace AkbarHossain\CommissionTask\Factory;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
 use AkbarHossain\CommissionTask\Service\BusinessClient;
+use AkbarHossain\CommissionTask\Service\Client;
 use AkbarHossain\CommissionTask\Service\PrivateClient;
 use DI\Container;
 use Symfony\Component\Console\Exception\InvalidOptionException;
@@ -19,20 +20,20 @@ class ClientFactory
         $this->container = $container;
     }
 
-    public function getClient(Transaction $transaction)
+    /**
+     * @throws InvalidOptionException
+     */
+    public function getClient(Transaction $transaction): Client
     {
         switch ($transaction->getClient()) {
             case 'private':
                 return new PrivateClient($this->container, $transaction);
-                break;
 
             case 'business':
                 return new BusinessClient($this->container, $transaction);
-                break;
 
             default:
                 throw new InvalidOptionException('Unknown client provided');
-                break;
         }
     }
 }

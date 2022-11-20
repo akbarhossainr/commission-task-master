@@ -52,7 +52,7 @@ abstract class Client
         return $this->container->get(sprintf('commission_rate.%s.%s', $client, $type)) ?? 1;
     }
 
-    protected function calculateCommission(float $amount, $client, $operationType)
+    protected function calculateCommission(float $amount, $client, $operationType): float
     {
         $rate = $this->getCommissionRate($operationType, $client);
 
@@ -63,8 +63,9 @@ abstract class Client
     {
         if ($currency !== $this->container->get('base_currency')) {
             $currencyRateService = $this->container->get('currency_rate');
+            $rate = $currencyRateService->getRates()[$currency] ?? 1;
 
-            return $amount / $currencyRateService->getRates()[$currency];
+            return $amount / $rate;
         }
 
         return $amount;

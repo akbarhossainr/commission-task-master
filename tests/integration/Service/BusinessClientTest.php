@@ -4,35 +4,20 @@ declare(strict_types=1);
 
 namespace AkbarHossain\CommissionTask\Test\Integration\Service;
 
-use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
 use AkbarHossain\CommissionTask\Service\BusinessClient;
 use AkbarHossain\CommissionTask\Test\TestCase;
 
 class BusinessClientTest extends TestCase
 {
-    protected $config;
-    protected $transaction;
-
-    public function setUp(): void
-    {
-        $this->config = $this->getContainer();
-    }
-
     public function dataProviderForBusinessClient()
     {
         return [
-            'default' => [
-                [
-                    'transaction' => $this->createTransactionObject()
-                        ->setClient('business'),
-                    'expected' => 7.5,
-                ],
-            ],
             'withdraw commission fee' => [
                 [
                     'transaction' => $this->createTransactionObject()
                         ->setClient('business')
-                        ->setOperationType('withdraw'),
+                        ->setOperationType('withdraw')
+                        ->setAmount(1500),
                     'expected' => 7.5,
                 ],
             ],
@@ -40,8 +25,9 @@ class BusinessClientTest extends TestCase
                 [
                     'transaction' => $this->createTransactionObject()
                         ->setClient('business')
-                        ->setOperationType('deposit'),
-                    'expected' => 0.45,
+                        ->setOperationType('deposit')
+                        ->setAmount(1500),
+                    'expected' => 1500 * 0.0003,
                 ],
             ],
         ];
@@ -51,13 +37,10 @@ class BusinessClientTest extends TestCase
     public function testCommissionMethodReturnCorrectResult(array $data)
     {
         $businessClient = new BusinessClient(
-            $this->config,
+            $this->getContainer(),
             $data['transaction']
         );
 
-        $actual = (new DecimalFormatter($this->config, $data['transaction']))
-            ->format($businessClient->commission());
-
-        $this->assertEquals($data['expected'], $actual);
+        $this->assertEquals($data['expected'], $businessClient->commission());
     }
 }

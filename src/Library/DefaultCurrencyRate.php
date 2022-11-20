@@ -27,13 +27,4 @@ final class DefaultCurrencyRate implements CurrencyRate
             ? []
             : ($response['rates'] ?? []);
     }
-
-    public function getBaseCurrency(): string
-    {
-        $response = json_decode($this->getExchangeRates(), true);
-
-        return json_last_error() !== JSON_ERROR_NONE
-            ? []
-            : ($response['base'] ?? 'EUR');
-    }
 }

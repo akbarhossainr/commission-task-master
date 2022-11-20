@@ -18,8 +18,8 @@ final class WithdrawLedger
 
     private function getStartAndEndDayOfTheWeek(Container $container): array
     {
-        $startDayOfWeek = $container->get('week.start_day', 'monday');
-        $endDayOfWeek = $container->get('week.end_day', 'sunday');
+        $startDayOfWeek = $container->get('week.start_day');
+        $endDayOfWeek = $container->get('week.end_day');
 
         return [
             constant(sprintf('%s::%s', CarbonInterface::class, strtoupper($startDayOfWeek))),

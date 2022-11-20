@@ -15,24 +15,20 @@ final class CsvFileReader
      */
     public function __construct(string $path)
     {
-        try {
-            if (!file_exists($path)) {
-                throw new \Exception('The file could not be found.');
-            }
+        if (!file_exists($path)) {
+            throw new \Exception('The file could not be found.');
+        }
 
-            $extention = pathinfo($path, PATHINFO_EXTENSION);
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
 
-            if ($extention !== self::EXTENSION) {
-                throw new \Exception(sprintf('Expecting file format is [%s]', self::EXTENSION));
-            }
+        if ($extension !== self::EXTENSION) {
+            throw new \Exception(sprintf('Required file format is [%s]', self::EXTENSION));
+        }
 
-            $this->file = fopen($path, 'r');
+        $this->file = fopen($path, 'r');
 
-            if (!$this->file) {
-                throw new \Exception('The file could not be opened.');
-            }
-        } catch (\Exception $execption) {
-            exit($execption->getMessage().PHP_EOL);
+        if (!$this->file) {
+            throw new \Exception('The file could not be opened.');
         }
     }
 
@@ -45,7 +41,7 @@ final class CsvFileReader
 
     public function __destruct()
     {
-        if ($this->file) {
+        if ($this->file !== null) {
             fclose($this->file);
         }
     }

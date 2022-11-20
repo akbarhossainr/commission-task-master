@@ -9,17 +9,9 @@ use DI\Container;
 
 class PrivateClient extends Client
 {
-    protected $container;
-    protected $freeWithdrawCountPerWeek;
-    protected $freeWithdrawAmountPerWeek;
-
     public function __construct(Container $container, Transaction $transaction)
     {
         parent::__construct($container, $transaction);
-        $this->container = $container;
-
-        $this->freeWithdrawCountPerWeek = $this->getFreeWithdrawCountPerWeek();
-        $this->freeWithdrawAmountPerWeek = $this->getFreeWithdrawAmountPerWeek();
     }
 
     protected function calculateWithdrawFee(): float
@@ -29,7 +21,7 @@ class PrivateClient extends Client
         $amountInBaseCurrency = $this->transaction->getAmountInBaseCurrency();
 
         /** @var WithdrawLedger $withdrawLedger */
-        $withdrawLedger = $this->container->get('withdaw_ledger');
+        $withdrawLedger = $this->container->get('withdraw_ledger');
         $withdrawLedger->addToLedger($userId, $transactionAt, $amountInBaseCurrency);
 
         $commissionableAmount = $this->getCommissionableAmount(
@@ -60,8 +52,8 @@ class PrivateClient extends Client
         string $transactionAt,
         WithdrawLedger $withdrawLedger
     ): bool {
-        return $withdrawLedger->withdrawInAWeek($this->container, $userId, $transactionAt) <= $this->freeWithdrawCountPerWeek
-            && $withdrawLedger->withdrawAmountInAWeek($this->container, $userId, $transactionAt) <= $this->freeWithdrawAmountPerWeek;
+        return $withdrawLedger->withdrawInAWeek($this->container, $userId, $transactionAt) <= $this->getFreeWithdrawAmountPerWeek()
+            && $withdrawLedger->withdrawAmountInAWeek($this->container, $userId, $transactionAt) <= $this->getFreeWithdrawAmountPerWeek();
     }
 
     private function getCommissionableAmount(
@@ -74,8 +66,8 @@ class PrivateClient extends Client
             return floatval(0);
         }
 
-        return $amount > $this->freeWithdrawAmountPerWeek
-            ? $amount - $this->freeWithdrawAmountPerWeek
+        return $amount > $this->getFreeWithdrawAmountPerWeek()
+            ? $amount - $this->getFreeWithdrawAmountPerWeek()
             : $amount;
     }
 }

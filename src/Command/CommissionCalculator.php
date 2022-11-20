@@ -22,7 +22,11 @@ final class CommissionCalculator
 
     public function execute(string $filePath)
     {
-        $fileReader = new CsvFileReader($filePath);
+        try {
+            $fileReader = new CsvFileReader($filePath);
+        } catch (\Exception $exception) {
+            exit($exception->getMessage().PHP_EOL);
+        }
 
         foreach ($fileReader->readLines() as $line) {
             $transaction = (new Transaction($this->container))->build([
@@ -34,14 +38,15 @@ final class CommissionCalculator
                 'currency' => $line[5],
             ]);
 
-            $commissionFee = $this->getClient($this->container, $transaction)->commission();
+            $commission = $this->getClient($transaction)->commission();
+            $formatter = (new DecimalFormatter($this->container, $transaction));
 
-            echo (new DecimalFormatter($this->container, $transaction))->format($commissionFee).PHP_EOL;
+            echo $formatter->format($commission).PHP_EOL;
         }
     }
 
-    private function getClient(Container $container, Transaction $transaction): Client
+    private function getClient(Transaction $transaction): Client
     {
-        return (new ClientFactory($container))->getClient($transaction);
+        return (new ClientFactory($this->container))->getClient($transaction);
     }
 }

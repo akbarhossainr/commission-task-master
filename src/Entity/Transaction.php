@@ -16,7 +16,6 @@ final class Transaction
     private $operationType;
     private $amount;
     private $currency;
-    private $amountInBaseCurrency;
 
     public function __construct(Container $container)
     {
@@ -107,17 +106,10 @@ final class Transaction
         if ($this->getCurrency() !== $this->container->get('base_currency')) {
             /** @var CurrencyRate $currencyRate */
             $currencyRate = $this->getCurrencyRateService();
-            $rate = $currencyRate->getRates()[$this->getCurrency()];
+            $rate = $currencyRate->getRates()[$this->getCurrency()] ?? 1;
         }
 
         return $this->getAmount() * $rate;
-    }
-
-    public function setAmountInBaseCurrency(float $value): self
-    {
-        $this->amountInBaseCurrency = $value;
-
-        return $this;
     }
 
     public function build(array $data): self

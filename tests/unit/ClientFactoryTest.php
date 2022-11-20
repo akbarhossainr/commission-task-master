@@ -28,23 +28,25 @@ class ClientFactoryTest extends TestCase
                     'expected' => new BusinessClient($this->getContainer(), $this->createTransactionObject()),
                 ],
             ],
-            'Unknown Client' => [
-                [
-                    'transaction' => $this->createTransactionObject()->setClient('unknown'),
-                    'expected' => new InvalidOptionException(),
-                ],
-            ],
         ];
     }
 
     /** @dataProvider  dataProviderForClient */
     public function testClientFactoryReturnCorrectClient(array $data): void
     {
-        try {
-            $client = (new ClientFactory($this->getContainer()))->getClient($data['transaction']);
-            $this->assertTrue($client instanceof $data['expected']);
-        } catch (\Exception $ex) {
-            $this->assertTrue($ex instanceof InvalidOptionException);
-        }
+        $clientFactory = new ClientFactory($this->getContainer());
+
+        $this->assertTrue(
+            $clientFactory->getClient($data['transaction']) instanceof $data['expected']
+        );
+    }
+
+    public function testClientTestFactoryThrowException(): void
+    {
+        $this->expectException(InvalidOptionException::class);
+
+        $clientFactory = new ClientFactory($this->getContainer());
+
+        $clientFactory->getClient($this->createTransactionObject()->setClient('Unknown'));
     }
 }
