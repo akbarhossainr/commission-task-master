@@ -20,12 +20,28 @@ final class DecimalFormatter implements Formatter
 
     public function format(float $number): string
     {
-        $currency = $this->transaction->getCurrency() === 'JPY'
-            ? $this->transaction->getCurrency()
-            : 'default';
+        return number_format($number, $this->getDecimalPlaceForCurrency(), '.', '');
+    }
 
-        $decimalPlace = $this->container->get(sprintf('decimal_place.%s', $currency));
+    /**
+     * According to the discussion in the task,
+     * the decimal position may change for different currencies.
+     * i.e. JPY is one of the currencies formally having no decimal cents
+     *
+     * Discussion Link:
+     * https://gist.github.com/PayseraGithub/ef2a59d0a6d6e680af2e46ccff1bca37?permalink_comment_id=4164518#gistcomment-4164518
+     */
+    private function getDecimalPlaceForCurrency(): int
+    {
+        $decimalPlace = $this->container->get('decimal_place.default');
 
-        return number_format($number, $decimalPlace, '.', '');
+        try {
+            $decimalPlace = $this->container->get(
+                sprintf('decimal_place.%s', $this->transaction->getCurrency())
+            );
+        } catch (\Throwable $th) {
+        }
+
+        return intval($decimalPlace);
     }
 }

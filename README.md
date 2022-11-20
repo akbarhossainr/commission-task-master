@@ -57,5 +57,5 @@ docker exec commission-task-master-php php src/index.php input.csv
 >Note: Instead of the `input.csv` you can use your `path/to/your/input.csv`
 4. Run the test.
 ```bash
-docker exec commission-task-master-php ./vendor/bin/phpunit
+docker exec commission-task-master-php ./vendor/bin/phpunit --testdox
 ```
