@@ -38,7 +38,7 @@ class DecimalFormatterTest extends TestCase
     }
 
     /** @dataProvider  dataProviderForDifferentCurrency */
-    public function testFormatOutputIsCorrect(array $data)
+    public function testFormatOutputIsCorrect(array $data): void
     {
         $formatter = new DecimalFormatter(
             $this->getContainer(),

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkbarHossain\CommissionTask\Test\Integration;
+namespace AkbarHossain\CommissionTask\Test\Integration\Service;
 
 use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
 use AkbarHossain\CommissionTask\Service\PrivateClient;
