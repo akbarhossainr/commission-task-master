@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Entity;
 
 use AkbarHossain\CommissionTask\Library\CurrencyRate;
-use AkbarHossain\CommissionTask\Service\Config;
+use DI\Container;
 
 final class Transaction
 {
-    private $config;
+    private $container;
     private $transactionAt;
     private $userId;
     private $client;
@@ -18,14 +18,14 @@ final class Transaction
     private $currency;
     private $amountInBaseCurrency;
 
-    public function __construct(Config $config)
+    public function __construct(Container $container)
     {
-        $this->config = $config;
+        $this->container = $container;
     }
 
     private function getCurrencyRateService(): CurrencyRate
     {
-        return $this->config->get('currency_rate');
+        return $this->container->get('currency_rate');
     }
 
     public function getTransactionAt(): string
@@ -102,9 +102,9 @@ final class Transaction
 
     public function getAmountInBaseCurrency(): float
     {
-        $rate = $this->config->get('base_currency.rate', 1);
+        $rate = $this->container->get('base_currency.rate');
 
-        if ($this->getCurrency() !== $this->config->get('base_currency', 'EUR')) {
+        if ($this->getCurrency() !== $this->container->get('base_currency')) {
             /** @var CurrencyRate $currencyRate */
             $currencyRate = $this->getCurrencyRateService();
             $rate = $currencyRate->getRates()[$this->getCurrency()];
@@ -122,7 +122,7 @@ final class Transaction
 
     public function build(array $data): self
     {
-        $obj = new self($this->config);
+        $obj = new self($this->container);
 
         $obj->setTransactionAt($data['transaction_at'])
             ->setUserId((int) $data['user_id'])

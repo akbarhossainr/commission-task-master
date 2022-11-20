@@ -6,8 +6,8 @@ require_once 'vendor/autoload.php';
 
 use AkbarHossain\CommissionTask\Command\CommissionCalculator;
 
-$config = require_once __DIR__.'/../bootstrap/config.php';
+$container = require_once __DIR__.'/../bootstrap/container.php';
 
 $input = $argv[1] ?? '';
 
-(new CommissionCalculator($config))->execute($input);
+(new CommissionCalculator($container))->execute($input);

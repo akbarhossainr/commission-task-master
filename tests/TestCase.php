@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Test;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
-use AkbarHossain\CommissionTask\Service\Config;
+use DI\Container;
 use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
 class TestCase extends FrameworkTestCase
 {
-    public function getDefaultConfig(): Config
+    public function getContainer(): Container
     {
-        return require __DIR__.'/../bootstrap/config.php';
+        return require __DIR__.'/../bootstrap/container.php';
     }
 
     public function createTransactionObject(array $data = []): Transaction
@@ -28,6 +28,6 @@ class TestCase extends FrameworkTestCase
             ]
             : $data;
 
-        return (new Transaction($this->getDefaultConfig()))->build($data);
+        return (new Transaction($this->getContainer()))->build($data);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkbarHossain\CommissionTask\Library;
 
-class DefaultCurrencyRate implements CurrencyRate
+final class DefaultCurrencyRate implements CurrencyRate
 {
     protected function getExchangeRates(): string
     {

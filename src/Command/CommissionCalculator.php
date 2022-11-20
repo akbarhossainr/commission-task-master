@@ -9,15 +9,15 @@ use AkbarHossain\CommissionTask\Factory\ClientFactory;
 use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
 use AkbarHossain\CommissionTask\Library\CsvFileReader;
 use AkbarHossain\CommissionTask\Service\Client;
-use AkbarHossain\CommissionTask\Service\Config;
+use DI\Container;
 
-class CommissionCalculator
+final class CommissionCalculator
 {
-    protected $config;
+    protected $container;
 
-    public function __construct(Config $config)
+    public function __construct(Container $container)
     {
-        $this->config = $config;
+        $this->container = $container;
     }
 
     public function execute(string $filePath)
@@ -25,7 +25,7 @@ class CommissionCalculator
         $fileReader = new CsvFileReader($filePath);
 
         foreach ($fileReader->readLines() as $line) {
-            $transaction = (new Transaction($this->config))->build([
+            $transaction = (new Transaction($this->container))->build([
                 'transaction_at' => $line[0],
                 'user_id' => $line[1],
                 'client' => $line[2],
@@ -34,14 +34,14 @@ class CommissionCalculator
                 'currency' => $line[5],
             ]);
 
-            $commissionFee = $this->getClient($this->config, $transaction)->commission();
+            $commissionFee = $this->getClient($this->container, $transaction)->commission();
 
-            echo (new DecimalFormatter($this->config, $transaction))->format($commissionFee).PHP_EOL;
+            echo (new DecimalFormatter($this->container, $transaction))->format($commissionFee).PHP_EOL;
         }
     }
 
-    private function getClient(Config $config, Transaction $transaction): Client
+    private function getClient(Container $container, Transaction $transaction): Client
     {
-        return (new ClientFactory($config))->getClient($transaction);
+        return (new ClientFactory($container))->getClient($transaction);
     }
 }

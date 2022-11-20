@@ -6,25 +6,20 @@ namespace AkbarHossain\CommissionTask\Service;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
+use DI\Container;
 
 final class WithdrawLedger
 {
-    private $config;
     public array $withdrawals = [];
 
     private const USER_ID = 'user_id';
     private const TRANSACTION_AT = 'transaction_at';
     private const AMOUNT = 'amount';
 
-    public function __construct(Config $config)
+    private function getStartAndEndDayOfTheWeek(Container $container): array
     {
-        $this->config = $config;
-    }
-
-    private function getStartAndEndDayOfTheWeek(): array
-    {
-        $startDayOfWeek = $this->config->get('week.start_day', 'monday');
-        $endDayOfWeek = $this->config->get('week.end_day', 'sunday');
+        $startDayOfWeek = $container->get('week.start_day', 'monday');
+        $endDayOfWeek = $container->get('week.end_day', 'sunday');
 
         return [
             constant(sprintf('%s::%s', CarbonInterface::class, strtoupper($startDayOfWeek))),
@@ -32,9 +27,9 @@ final class WithdrawLedger
         ];
     }
 
-    private function transactionsInAWeek(int $userId, string $date): array
+    private function transactionsInAWeek(Container $container, int $userId, string $date): array
     {
-        [$startDayOfWeek, $endDayOfWeek] = $this->getStartAndEndDayOfTheWeek();
+        [$startDayOfWeek, $endDayOfWeek] = $this->getStartAndEndDayOfTheWeek($container);
 
         $carbonDate = CarbonImmutable::parse($date);
         $start = $carbonDate->startOfWeek($startDayOfWeek);
@@ -63,16 +58,16 @@ final class WithdrawLedger
         ];
     }
 
-    public function withdrawInAWeek(int $userId, string $date): int
+    public function withdrawInAWeek(Container $container,int $userId, string $date): int
     {
-        return count($this->transactionsInAWeek($userId, $date));
+        return count($this->transactionsInAWeek($container, $userId, $date));
     }
 
-    public function withdrawAmountInAWeek(int $userId, string $date): float
+    public function withdrawAmountInAWeek(Container $container,int $userId, string $date): float
     {
         return array_sum(
             array_column(
-                $this->transactionsInAWeek($userId, $date),
+                $this->transactionsInAWeek($container, $userId, $date),
                 self::AMOUNT
             )
         );

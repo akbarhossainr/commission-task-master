@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Service;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
+use DI\Container;
 
 abstract class Client
 {
     public const OPERATION_TYPE_WITHDRAW = 'withdraw';
     public const OPERATION_TYPE_DEPOSIT = 'deposit';
 
-    protected $config;
+    protected $container;
     protected $transaction;
 
-    public function __construct(Config $config, Transaction $transaction)
+    public function __construct(Container $container, Transaction $transaction)
     {
-        $this->config = $config;
+        $this->container = $container;
         $this->transaction = $transaction;
     }
 
@@ -48,7 +49,7 @@ abstract class Client
 
     protected function getCommissionRate(string $type, string $client): float
     {
-        return $this->config->get(sprintf('commission_rate.%s.%s', $client, $type)) ?? 1;
+        return $this->container->get(sprintf('commission_rate.%s.%s', $client, $type)) ?? 1;
     }
 
     protected function calculateCommission(float $amount, $client, $operationType)
@@ -60,8 +61,8 @@ abstract class Client
 
     protected function revertToTransactionCurrency(float $amount, string $currency): float
     {
-        if ($currency !== $this->config->get('base_currency', 'EUR')) {
-            $currencyRateService = $this->config->get('currency_rate');
+        if ($currency !== $this->container->get('base_currency')) {
+            $currencyRateService = $this->container->get('currency_rate');
 
             return $amount / $currencyRateService->getRates()[$currency];
         }
@@ -71,11 +72,11 @@ abstract class Client
 
     protected function getFreeWithdrawCountPerWeek(): int
     {
-        return $this->config->get('free_withdraw.per_week', 3);
+        return $this->container->get('free_withdraw.per_week');
     }
 
     protected function getFreeWithdrawAmountPerWeek(): float
     {
-        return floatval($this->config->get('free_withdraw.max_count', 1000));
+        return floatval($this->container->get('free_withdraw.max_amount'));
     }
 }

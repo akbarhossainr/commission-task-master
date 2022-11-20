@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkbarHossain\CommissionTask\Library;
 
-class CsvFileReader
+final class CsvFileReader
 {
     public const EXTENSION = 'csv';
 

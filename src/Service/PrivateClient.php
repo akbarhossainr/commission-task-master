@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Service;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
+use DI\Container;
 
 class PrivateClient extends Client
 {
+    protected $container;
     protected $freeWithdrawCountPerWeek;
     protected $freeWithdrawAmountPerWeek;
 
-    public function __construct(Config $config, Transaction $transaction)
+    public function __construct(Container $container, Transaction $transaction)
     {
-        parent::__construct($config, $transaction);
+        parent::__construct($container, $transaction);
+        $this->container = $container;
 
         $this->freeWithdrawCountPerWeek = $this->getFreeWithdrawCountPerWeek();
         $this->freeWithdrawAmountPerWeek = $this->getFreeWithdrawAmountPerWeek();
@@ -26,7 +29,7 @@ class PrivateClient extends Client
         $amountInBaseCurrency = $this->transaction->getAmountInBaseCurrency();
 
         /** @var WithdrawLedger $withdrawLedger */
-        $withdrawLedger = $this->config->get('withdaw_ledger');
+        $withdrawLedger = $this->container->get('withdaw_ledger');
         $withdrawLedger->addToLedger($userId, $transactionAt, $amountInBaseCurrency);
 
         $commissionableAmount = $this->getCommissionableAmount(
@@ -57,8 +60,8 @@ class PrivateClient extends Client
         string $transactionAt,
         WithdrawLedger $withdrawLedger
     ): bool {
-        return $withdrawLedger->withdrawInAWeek($userId, $transactionAt) <= $this->freeWithdrawCountPerWeek
-            && $withdrawLedger->withdrawAmountInAWeek($userId, $transactionAt) <= $this->freeWithdrawAmountPerWeek;
+        return $withdrawLedger->withdrawInAWeek($this->container, $userId, $transactionAt) <= $this->freeWithdrawCountPerWeek
+            && $withdrawLedger->withdrawAmountInAWeek($this->container, $userId, $transactionAt) <= $this->freeWithdrawAmountPerWeek;
     }
 
     private function getCommissionableAmount(

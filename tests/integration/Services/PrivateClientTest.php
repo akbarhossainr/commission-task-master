@@ -15,7 +15,7 @@ class PrivateClientTest extends TestCase
 
     public function setUp(): void
     {
-        $this->config = $this->getDefaultConfig();
+        $this->config = $this->getContainer();
     }
 
     public function dataProviderForPrivateClient()

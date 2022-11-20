@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Formatter;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
-use AkbarHossain\CommissionTask\Service\Config;
+use DI\Container;
 
 final class DecimalFormatter implements Formatter
 {
-    private $config;
+    private $container;
     private $transaction;
 
-    public function __construct(Config $config, Transaction $transaction)
+    public function __construct(Container $container, Transaction $transaction)
     {
-        $this->config = $config;
+        $this->container = $container;
         $this->transaction = $transaction;
     }
 
@@ -24,7 +24,7 @@ final class DecimalFormatter implements Formatter
             ? $this->transaction->getCurrency()
             : 'default';
 
-        $decimalPlace = $this->config->get(sprintf('decimal_place.%s', $currency));
+        $decimalPlace = $this->container->get(sprintf('decimal_place.%s', $currency));
 
         return number_format($number, $decimalPlace, '.', '');
     }

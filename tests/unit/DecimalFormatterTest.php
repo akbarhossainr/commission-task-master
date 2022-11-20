@@ -41,7 +41,7 @@ class DecimalFormatterTest extends TestCase
     public function testFormatOutputIsCorrect(array $data)
     {
         $formatter = new DecimalFormatter(
-            $this->getDefaultConfig(),
+            $this->getContainer(),
             $data['transaction']
         );
 

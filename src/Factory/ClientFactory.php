@@ -6,28 +6,28 @@ namespace AkbarHossain\CommissionTask\Factory;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
 use AkbarHossain\CommissionTask\Service\BusinessClient;
-use AkbarHossain\CommissionTask\Service\Config;
 use AkbarHossain\CommissionTask\Service\PrivateClient;
+use DI\Container;
 use Symfony\Component\Console\Exception\InvalidOptionException;
 
 class ClientFactory
 {
-    protected $config;
+    protected $container;
 
-    public function __construct(Config $config)
+    public function __construct(Container $container)
     {
-        $this->config = $config;
+        $this->container = $container;
     }
 
     public function getClient(Transaction $transaction)
     {
         switch ($transaction->getClient()) {
             case 'private':
-                return new PrivateClient($this->config, $transaction);
+                return new PrivateClient($this->container, $transaction);
                 break;
 
             case 'business':
-                return new BusinessClient($this->config, $transaction);
+                return new BusinessClient($this->container, $transaction);
                 break;
 
             default:
