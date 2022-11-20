@@ -58,12 +58,12 @@ final class WithdrawLedger
         ];
     }
 
-    public function withdrawInAWeek(Container $container,int $userId, string $date): int
+    public function withdrawInAWeek(Container $container, int $userId, string $date): int
     {
         return count($this->transactionsInAWeek($container, $userId, $date));
     }
 
-    public function withdrawAmountInAWeek(Container $container,int $userId, string $date): float
+    public function withdrawAmountInAWeek(Container $container, int $userId, string $date): float
     {
         return array_sum(
             array_column(

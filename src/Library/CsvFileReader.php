@@ -8,7 +8,7 @@ final class CsvFileReader
 {
     public const EXTENSION = 'csv';
 
-    protected $file;
+    private $file;
 
     /**
      * @throws \Exception

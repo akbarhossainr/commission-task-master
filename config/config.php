@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use AkbarHossain\CommissionTask\Library\DefaultCurrencyRate;
 use AkbarHossain\CommissionTask\Service\WithdrawLedger;
 
@@ -19,5 +21,5 @@ return [
     'free_withdraw.per_week' => 3,
     'week.end_day' => 'sunday',
     'week.start_day' => 'monday',
-    'withdaw_ledger' => create(WithdrawLedger::class)
+    'withdaw_ledger' => create(WithdrawLedger::class),
 ];

@@ -6,7 +6,7 @@ namespace AkbarHossain\CommissionTask\Library;
 
 final class DefaultCurrencyRate implements CurrencyRate
 {
-    protected function getExchangeRates(): string
+    private function getExchangeRates(): string
     {
         $curlConnection = curl_init();
 

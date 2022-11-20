@@ -13,7 +13,7 @@ use DI\Container;
 
 final class CommissionCalculator
 {
-    protected $container;
+    private $container;
 
     public function __construct(Container $container)
     {
