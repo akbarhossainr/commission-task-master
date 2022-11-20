@@ -20,7 +20,7 @@ final class CommissionCalculator
         $this->container = $container;
     }
 
-    public function execute(string $filePath)
+    public function execute(string $filePath): void
     {
         try {
             $fileReader = new CsvFileReader($filePath);

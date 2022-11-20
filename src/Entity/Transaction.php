@@ -9,13 +9,13 @@ use DI\Container;
 
 final class Transaction
 {
-    private $container;
-    private $transactionAt;
-    private $userId;
-    private $client;
-    private $operationType;
-    private $amount;
-    private $currency;
+    private Container $container;
+    private string $transactionAt;
+    private int $userId;
+    private string $client;
+    private string $operationType;
+    private float $amount;
+    private string $currency;
 
     public function __construct(Container $container)
     {
@@ -121,7 +121,8 @@ final class Transaction
             ->setClient($data['client'])
             ->setOperationType($data['operation_type'])
             ->setAmount((float) $data['amount'])
-            ->setCurrency($data['currency']);
+            ->setCurrency($data['currency'])
+        ;
 
         return $obj;
     }

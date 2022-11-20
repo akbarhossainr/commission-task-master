@@ -47,15 +47,6 @@ class PrivateClient extends Client
         );
     }
 
-    private function isFreeOfChargeApplicable(
-        int $userId,
-        string $transactionAt,
-        WithdrawLedger $withdrawLedger
-    ): bool {
-        return $withdrawLedger->withdrawInAWeek($this->container, $userId, $transactionAt) <= $this->getFreeWithdrawAmountPerWeek()
-            && $withdrawLedger->withdrawAmountInAWeek($this->container, $userId, $transactionAt) <= $this->getFreeWithdrawAmountPerWeek();
-    }
-
     private function getCommissionableAmount(
         float $amount,
         int $userId,
@@ -69,5 +60,26 @@ class PrivateClient extends Client
         return $amount > $this->getFreeWithdrawAmountPerWeek()
             ? $amount - $this->getFreeWithdrawAmountPerWeek()
             : $amount;
+    }
+
+    private function isFreeOfChargeApplicable(
+        int $userId,
+        string $transactionAt,
+        WithdrawLedger $withdrawLedger
+    ): bool {
+        $withdrawInAWeek = $withdrawLedger->withdrawInAWeek(
+            $this->container,
+            $userId,
+            $transactionAt
+        );
+
+        $withdrawAmountInAWeek = $withdrawLedger->withdrawAmountInAWeek(
+            $this->container,
+            $userId,
+            $transactionAt
+        );
+
+        return $withdrawInAWeek <= $this->getFreeWithdrawCountPerWeek()
+            && $withdrawAmountInAWeek <= $this->getFreeWithdrawAmountPerWeek();
     }
 }
