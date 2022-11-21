@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Test;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
-use DI\Container;
+use AkbarHossain\CommissionTask\Service\ContainerContract;
 use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
 class TestCase extends FrameworkTestCase
 {
-    public function getContainer(): Container
+    public function getContainer(): ContainerContract
     {
         return require __DIR__.'/../bootstrap/container.php';
     }

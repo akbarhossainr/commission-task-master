@@ -18,14 +18,20 @@ class ClientFactoryTest extends TestCase
             'Private Client' => [
                 [
                     'transaction' => $this->createTransactionObject(),
-                    'expected' => new PrivateClient($this->getContainer(), $this->createTransactionObject()),
+                    'expected' => new PrivateClient(
+                        $this->getContainer(),
+                        $this->createTransactionObject()
+                    ),
                 ],
             ],
             'Business Client' => [
                 [
                     'transaction' => $this->createTransactionObject()
                         ->setClient('business'),
-                    'expected' => new BusinessClient($this->getContainer(), $this->createTransactionObject()),
+                    'expected' => new BusinessClient(
+                        $this->getContainer(),
+                        $this->createTransactionObject()
+                    ),
                 ],
             ],
         ];
