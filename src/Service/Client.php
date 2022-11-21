@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Service;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
-use DI\Container;
+use AkbarHossain\CommissionTask\Library\DefaultCurrencyRate;
 
-abstract class Client
+abstract class Client implements ClientContract
 {
     public const OPERATION_TYPE_WITHDRAW = 'withdraw';
     public const OPERATION_TYPE_DEPOSIT = 'deposit';
@@ -15,7 +15,7 @@ abstract class Client
     protected $container;
     protected $transaction;
 
-    public function __construct(Container $container, Transaction $transaction)
+    public function __construct(ContainerContract $container, Transaction $transaction)
     {
         $this->container = $container;
         $this->transaction = $transaction;
@@ -62,7 +62,7 @@ abstract class Client
     protected function revertToTransactionCurrency(float $amount, string $currency): float
     {
         if ($currency !== $this->container->get('base_currency')) {
-            $currencyRateService = $this->container->get('currency_rate');
+            $currencyRateService = $this->container->get(DefaultCurrencyRate::class);
             $rate = $currencyRateService->getRates()[$currency] ?? 1;
 
             return $amount / $rate;
