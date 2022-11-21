@@ -37,7 +37,7 @@ class BusinessClientTest extends TestCase
     public function testCommissionMethodReturnCorrectResult(array $data)
     {
         $businessClient = new BusinessClient(
-            $this->getContainer(),
+            $this->getContainerMock(),
             $data['transaction']
         );
 

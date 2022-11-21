@@ -43,6 +43,6 @@ class TestCase extends FrameworkTestCase
             ]
             : $data;
 
-        return (new Transaction($this->getContainer()))->build($data);
+        return (new Transaction($this->getContainerMock()))->build($data);
     }
 }

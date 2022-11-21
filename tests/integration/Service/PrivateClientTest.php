@@ -35,7 +35,7 @@ class PrivateClientTest extends TestCase
     public function testCommissionMethodReturnCorrectResult(array $data)
     {
         $privateClient = new PrivateClient(
-            $this->getContainer(),
+            $this->getContainerMock(),
             $data['transaction']
         );
 
