@@ -16,7 +16,7 @@ cd commission-task-master
 ### using PHP & Composer
 
 **Requirements**
-- PHP CLI (version>=7.4)
+- PHP CLI (version>=8.1)
 - Composer (Recommended version=2.2.2)
 
 **Steps**
@@ -32,7 +32,7 @@ php src/index.php input.csv
 >Note: Instead of the `input.csv` you can use your `path/to/your/input.csv`
 3. Run the test
 ```bash
-./vendor/bin/phpunit
+./vendor/bin/phpunit --testdox
 ```
 
 ### using Docker
