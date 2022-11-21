@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
-use DI\ContainerBuilder;
+use AkbarHossain\CommissionTask\Service\Container;
 
-$definations = [];
+$container = new Container();
 
-$containerBuilder = new ContainerBuilder();
-$containerBuilder->addDefinitions(__DIR__.'/../config/config.php');
+$configs = require __DIR__.'/../config/config.php';
 
-return $containerBuilder->build();
+foreach ($configs as $id => $config) {
+    $container->set($id, $config);
+}
+
+return $container;
