@@ -6,6 +6,7 @@ namespace AkbarHossain\CommissionTask\Test;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
 use AkbarHossain\CommissionTask\Service\ContainerContract;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase as FrameworkTestCase;
 
 class TestCase extends FrameworkTestCase
@@ -13,6 +14,20 @@ class TestCase extends FrameworkTestCase
     public function getContainer(): ContainerContract
     {
         return require __DIR__.'/../bootstrap/container.php';
+    }
+
+    public function getContainerMock(): MockObject
+    {
+        $configs = require __DIR__.'/../config/config.php';
+
+        $container = $this->getMockBuilder(ContainerContract::class)->getMock();
+        $container->method('get')->will(
+            $this->returnCallback(function ($id) use ($configs) {
+                return $configs[$id] ?? throw new \InvalidArgumentException();
+            })
+        );
+
+        return $container;
     }
 
     public function createTransactionObject(array $data = []): Transaction

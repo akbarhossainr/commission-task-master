@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AkbarHossain\CommissionTask\Test\Unit;
 
-use AkbarHossain\CommissionTask\Service\ContainerContract;
 use AkbarHossain\CommissionTask\Service\PrivateClient;
 use AkbarHossain\CommissionTask\Test\TestCase;
 
@@ -72,15 +71,7 @@ class PrivateClientTest extends TestCase
      */
     public function calculateWithdrawFeeOutputIsFollowingTheBusinessRule(array $data): void
     {
-        // $container = $this->getContainer();
-        $configs = require __DIR__.'/../../config/config.php';
-
-        $container = $this->getMockBuilder(ContainerContract::class)->getMock();
-        $container->method('get')->will(
-            $this->returnCallback(function ($id) use ($configs) {
-                return $configs[$id] ?? throw new \InvalidArgumentException();
-            })
-        );
+        $container = $this->getContainerMock();
 
         foreach ($data['transactions'] as $transaction) {
             $privateClient = new PrivateClient($container, $transaction);
