@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Service;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
-use DI\Container;
 
 class BusinessClient extends Client
 {
-    public function __construct(Container $container, Transaction $transaction)
+    public function __construct(ContainerContract $container, Transaction $transaction)
     {
         parent::__construct($container, $transaction);
     }

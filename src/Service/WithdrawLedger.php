@@ -6,7 +6,6 @@ namespace AkbarHossain\CommissionTask\Service;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
-use DI\Container;
 
 final class WithdrawLedger
 {
@@ -16,7 +15,7 @@ final class WithdrawLedger
     private const TRANSACTION_AT = 'transaction_at';
     private const AMOUNT = 'amount';
 
-    private function getStartAndEndDayOfTheWeek(Container $container): array
+    private function getStartAndEndDayOfTheWeek(ContainerContract $container): array
     {
         $startDayOfWeek = $container->get('week.start_day');
         $endDayOfWeek = $container->get('week.end_day');
@@ -27,7 +26,7 @@ final class WithdrawLedger
         ];
     }
 
-    private function transactionsInAWeek(Container $container, int $userId, string $date): array
+    private function transactionsInAWeek(ContainerContract $container, int $userId, string $date): array
     {
         [$startDayOfWeek, $endDayOfWeek] = $this->getStartAndEndDayOfTheWeek($container);
 
@@ -58,12 +57,12 @@ final class WithdrawLedger
         ];
     }
 
-    public function withdrawInAWeek(Container $container, int $userId, string $date): int
+    public function withdrawInAWeek(ContainerContract $container, int $userId, string $date): int
     {
         return count($this->transactionsInAWeek($container, $userId, $date));
     }
 
-    public function withdrawAmountInAWeek(Container $container, int $userId, string $date): float
+    public function withdrawAmountInAWeek(ContainerContract $container, int $userId, string $date): float
     {
         return array_sum(
             array_column(

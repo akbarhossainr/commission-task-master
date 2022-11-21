@@ -8,14 +8,14 @@ use AkbarHossain\CommissionTask\Entity\Transaction;
 use AkbarHossain\CommissionTask\Factory\ClientFactory;
 use AkbarHossain\CommissionTask\Formatter\DecimalFormatter;
 use AkbarHossain\CommissionTask\Library\CsvFileReader;
-use AkbarHossain\CommissionTask\Service\Client;
-use DI\Container;
+use AkbarHossain\CommissionTask\Service\ClientContract;
+use AkbarHossain\CommissionTask\Service\ContainerContract;
 
 final class CommissionCalculator
 {
     private $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerContract $container)
     {
         $this->container = $container;
     }
@@ -45,7 +45,7 @@ final class CommissionCalculator
         }
     }
 
-    private function getClient(Transaction $transaction): Client
+    private function getClient(Transaction $transaction): ClientContract
     {
         return (new ClientFactory($this->container))->getClient($transaction);
     }

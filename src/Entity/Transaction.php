@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Entity;
 
 use AkbarHossain\CommissionTask\Library\CurrencyRate;
-use DI\Container;
+use AkbarHossain\CommissionTask\Library\DefaultCurrencyRate;
+use AkbarHossain\CommissionTask\Service\ContainerContract;
 
 final class Transaction
 {
-    private Container $container;
+    private ContainerContract $container;
     private string $transactionAt;
     private int $userId;
     private string $client;
@@ -17,14 +18,14 @@ final class Transaction
     private float $amount;
     private string $currency;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerContract $container)
     {
         $this->container = $container;
     }
 
     private function getCurrencyRateService(): CurrencyRate
     {
-        return $this->container->get('currency_rate');
+        return $this->container->get(DefaultCurrencyRate::class);
     }
 
     public function getTransactionAt(): string
@@ -82,7 +83,7 @@ final class Transaction
 
     public function setAmount(float $value): self
     {
-        $this->amount = $value;
+        $this->amount = floatval($value);
 
         return $this;
     }

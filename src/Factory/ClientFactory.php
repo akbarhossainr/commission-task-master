@@ -6,16 +6,16 @@ namespace AkbarHossain\CommissionTask\Factory;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
 use AkbarHossain\CommissionTask\Service\BusinessClient;
-use AkbarHossain\CommissionTask\Service\Client;
+use AkbarHossain\CommissionTask\Service\ClientContract;
+use AkbarHossain\CommissionTask\Service\ContainerContract;
 use AkbarHossain\CommissionTask\Service\PrivateClient;
-use DI\Container;
 use Symfony\Component\Console\Exception\InvalidOptionException;
 
 class ClientFactory
 {
     protected $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerContract $container)
     {
         $this->container = $container;
     }
@@ -23,7 +23,7 @@ class ClientFactory
     /**
      * @throws InvalidOptionException
      */
-    public function getClient(Transaction $transaction): Client
+    public function getClient(Transaction $transaction): ClientContract
     {
         switch ($transaction->getClient()) {
             case 'private':

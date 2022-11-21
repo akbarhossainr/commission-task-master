@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace AkbarHossain\CommissionTask\Service;
 
 use AkbarHossain\CommissionTask\Entity\Transaction;
-use DI\Container;
 
 class PrivateClient extends Client
 {
-    public function __construct(Container $container, Transaction $transaction)
+    public function __construct(ContainerContract $container, Transaction $transaction)
     {
         parent::__construct($container, $transaction);
     }
@@ -21,7 +20,7 @@ class PrivateClient extends Client
         $amountInBaseCurrency = $this->transaction->getAmountInBaseCurrency();
 
         /** @var WithdrawLedger $withdrawLedger */
-        $withdrawLedger = $this->container->get('withdraw_ledger');
+        $withdrawLedger = $this->container->get(WithdrawLedger::class);
         $withdrawLedger->addToLedger($userId, $transactionAt, $amountInBaseCurrency);
 
         $commissionableAmount = $this->getCommissionableAmount(
