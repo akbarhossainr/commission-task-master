@@ -61,6 +61,20 @@ class PrivateClientTest extends TestCase
                     'expected' => 0,
                 ],
             ],
+            'All deposits are charged 0.03% of deposit amount' => [
+                [
+                    'transactions' => [
+                        $this->createTransactionObject()
+                            ->setTransactionAt('2022-01-04')
+                            ->setUserId(2)
+                            ->setClient('private')
+                            ->setOperationType('deposit')
+                            ->setAmount(300)
+                            ->setCurrency('EUR'),
+                    ],
+                    'expected' => 300 * 0.0003,
+                ],
+            ],
         ];
     }
 
@@ -69,7 +83,7 @@ class PrivateClientTest extends TestCase
      *
      * @dataProvider dataProviderForPrivateClient
      */
-    public function calculateWithdrawFeeOutputIsFollowingTheBusinessRule(array $data): void
+    public function calculateWithdrawFeeOrDepositFeeCalculateAccordingTheBusinessRule(array $data): void
     {
         $container = $this->getContainerMock();
 

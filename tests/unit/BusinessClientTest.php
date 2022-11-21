@@ -48,7 +48,7 @@ class BusinessClientTest extends TestCase
      *
      * @dataProvider dataProviderForBusinessClient
      */
-    public function calculateWithdrawFeeOutputIsFollowingTheBusinessRule(array $data): void
+    public function calculateWithdrawFeeOrDepositFeeCalculateAccordingTheBusinessRule(array $data): void
     {
         $container = $this->getContainerMock();
 
